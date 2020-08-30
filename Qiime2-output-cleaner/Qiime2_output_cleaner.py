@@ -10,96 +10,99 @@ def taxonomy_selector(input_file, taxa_level):
         f = file.read().split('\n')
         for line in f:
             line = line.replace(',,', ',')
-            line = re.split(';|,',line)
+            line = re.split(';|,|\t',line)
             line = [i for i in line if i]
-            length = len(line)
-            if length >= taxa_level:
-                index = taxa_level - 1
-                if "Subgroup" not in line[index]:
-                    if "uncultured" not in line[index] and "uncultivated" not in line[index]:
-                        if "D_5__" in line[index] or "g " in line[index]:
-                            ita_output = line[index].replace("D_5__", "g ")
-                            ita_output = ita_output.split('g ')
-                            ita_output[1] = "$\it{"+ita_output[1]+"}$"
-                            real_output = "g " + ita_output[1]
-                            Taxon_assignment.append(real_output)
-                        elif "D_6__" in line[index] or "s " in line[index]:
-                            ita_output = line[index].replace("D_6__", "s ")
-                            ita_output = ita_output.split('s ')
-                            ita_output[1] = "$\it{"+ita_output[1]+"}$"
-                            real_output = "s " + ita_output[1]
-                            Taxon_assignment.append(real_output)
-                        else:
-                            Taxon_assignment.append(line[index])
-                    else: #this means it contains "uncultured" or "uncultivated"
-                        for ii in range(index+1):
-                            if "uncultured" not in line[index-ii] and "uncultivated" not in line[index-ii] and "Subgroup" not in line[index-ii]:
-                                Taxon_assignment.append(line[index-ii])
-                                break #exits for loop and move on to next line on csv   
-                            elif "Subgroup" in line[index-ii]:    
-                                for jj in range(index+1):
-                                    if "Subgroup" not in line[index-jj] and "uncultured" not in line[index-jj] and "uncultivated" not in line[index-jj]:
-                                        Taxon_assignment.append(line[index-jj] + " (" + line[index-ii] + ")")
-                                        break
-                                    #else this moves on to next item on the list and checks again
-                                break
-                            # if none of those triggers, then "uncultured"/"uncultivated" is in there again
-                else: #this means "Subgroup" is in the cell
-                    for ii in range(index+1):
-                        if "Subgroup" not in line[index-ii] and "uncultured" not in line[index-ii] and "uncultivated" not in line[index-ii]:
+            if len(line) != 0:
+                line = line[0:-1]
+                length = len(line)
+                if length >= taxa_level:
+                    index = taxa_level - 1
+                    if "Subgroup" not in line[index]:
+                        if "uncultured" not in line[index] and "uncultivated" not in line[index]:
                             if "D_5__" in line[index] or "g " in line[index]:
                                 ita_output = line[index].replace("D_5__", "g ")
                                 ita_output = ita_output.split('g ')
+                                ita_output[1] = ita_output[1].replace(" ", "\ ")
                                 ita_output[1] = "$\it{"+ita_output[1]+"}$"
                                 real_output = "g " + ita_output[1]
-                                Taxon_assignment.append(line[index-ii] + " (" + real_output + ")")
-                                break
+                                Taxon_assignment.append(real_output)
                             elif "D_6__" in line[index] or "s " in line[index]:
                                 ita_output = line[index].replace("D_6__", "s ")
                                 ita_output = ita_output.split('s ')
                                 ita_output[1] = "$\it{"+ita_output[1]+"}$"
                                 real_output = "s " + ita_output[1]
                                 Taxon_assignment.append(real_output)
-                                break
                             else:
-                                Taxon_assignment.append(line[index-ii] + " (" + line[index-ii] + ")")
-                                break
-            else: #this means the line doesn't have enough items, so we use the length of line instead
-                length = length-1
-                if "Subgroup" not in line[length]:
-                    if "uncultured" not in line[length] and "uncultivated" not in line[length]:
-                        if "D_5__" in line[length] or "g " in line[length]:
-                            ita_output = line[length].replace("D_5__", "g ")
-                            ita_output = ita_output.split('g ')
-                            ita_output[1] = "$\it{"+ita_output[1]+"}$"
-                            real_output = "g " + ita_output[1]
-                            Taxon_assignment.append(real_output)
-                        elif "D_6__" in line[length] or "s " in line[length]:
-                            ita_output = line[length].replace("D_6__", "s ")
-                            ita_output = ita_output.split('s ')
-                            ita_output[1] = "$\it{"+ita_output[1]+"}$"
-                            real_output = "s " + ita_output[1]
-                            Taxon_assignment.append(real_output)
-                        else:
-                            Taxon_assignment.append(line[length])
-                    else: #this means it contains "uncultured" or "uncultivated"
+                                Taxon_assignment.append(line[index])
+                        else: #this means it contains "uncultured" or "uncultivated"
+                            for ii in range(index+1):
+                                if "uncultured" not in line[index-ii] and "uncultivated" not in line[index-ii] and "Subgroup" not in line[index-ii]:
+                                    Taxon_assignment.append(line[index-ii])
+                                    break #exits for loop and move on to next line on csv   
+                                elif "Subgroup" in line[index-ii]:    
+                                    for jj in range(index+1):
+                                        if "Subgroup" not in line[index-jj] and "uncultured" not in line[index-jj] and "uncultivated" not in line[index-jj]:
+                                            Taxon_assignment.append(line[index-jj] + " (" + line[index-ii] + ")")
+                                            break
+                                        #else this moves on to next item on the list and checks again
+                                    break
+                                # if none of those triggers, then "uncultured"/"uncultivated" is in there again
+                    else: #this means "Subgroup" is in the cell
+                        for ii in range(index+1):
+                            if "Subgroup" not in line[index-ii] and "uncultured" not in line[index-ii] and "uncultivated" not in line[index-ii]:
+                                if "D_5__" in line[index] or "g " in line[index]:
+                                    ita_output = line[index].replace("D_5__", "g ")
+                                    ita_output = ita_output.split('g ')
+                                    ita_output[1] = "$\it{"+ita_output[1]+"}$"
+                                    real_output = "g " + ita_output[1]
+                                    Taxon_assignment.append(line[index-ii] + " (" + real_output + ")")
+                                    break
+                                elif "D_6__" in line[index] or "s " in line[index]:
+                                    ita_output = line[index].replace("D_6__", "s ")
+                                    ita_output = ita_output.split('s ')
+                                    ita_output[1] = "$\it{"+ita_output[1]+"}$"
+                                    real_output = "s " + ita_output[1]
+                                    Taxon_assignment.append(real_output)
+                                    break
+                                else:
+                                    Taxon_assignment.append(line[index-ii] + " (" + line[index-ii] + ")")
+                                    break
+                else: #this means the line doesn't have enough items, so we use the length of line instead
+                    length = length-1
+                    if "Subgroup" not in line[length]:
+                        if "uncultured" not in line[length] and "uncultivated" not in line[length]:
+                            if "D_5__" in line[length] or "g " in line[length]:
+                                ita_output = line[length].replace("D_5__", "g ")
+                                ita_output = ita_output.split('g ')
+                                ita_output[1] = "$\it{"+ita_output[1]+"}$"
+                                real_output = "g " + ita_output[1]
+                                Taxon_assignment.append(real_output)
+                            elif "D_6__" in line[length] or "s " in line[length]:
+                                ita_output = line[length].replace("D_6__", "s ")
+                                ita_output = ita_output.split('s ')
+                                ita_output[1] = "$\it{"+ita_output[1]+"}$"
+                                real_output = "s " + ita_output[1]
+                                Taxon_assignment.append(real_output)
+                            else:
+                                Taxon_assignment.append(line[length])
+                        else: #this means it contains "uncultured" or "uncultivated"
+                            for ii in range(length+1):
+                                if "uncultured" not in line[length-ii] and "uncultivated" not in line[length-ii] and "Subgroup" not in line[length-ii]:
+                                    Taxon_assignment.append(line[length-ii])
+                                    break #exits for loop and move on to next line on csv   
+                                elif "Subgroup" in line[length-ii]:    
+                                    for jj in range(length+1):
+                                        if "Subgroup" not in line[length-jj] and "uncultured" not in line[length-jj] and "uncultivated" not in line[length-jj]:
+                                            Taxon_assignment.append(line[length-jj] + " (" + line[length-ii] + ")")
+                                            break
+                                        #else this moves on to next item on the list and checks again
+                                    break
+                                # if none of those triggers, then "uncultured"/"uncultivated" is in there again
+                    else: #this means "Subgroup" is in the cell
                         for ii in range(length+1):
-                            if "uncultured" not in line[length-ii] and "uncultivated" not in line[length-ii] and "Subgroup" not in line[length-ii]:
-                                Taxon_assignment.append(line[length-ii])
-                                break #exits for loop and move on to next line on csv   
-                            elif "Subgroup" in line[length-ii]:    
-                                for jj in range(length+1):
-                                    if "Subgroup" not in line[length-jj] and "uncultured" not in line[length-jj] and "uncultivated" not in line[length-jj]:
-                                        Taxon_assignment.append(line[length-jj] + " (" + line[length-ii] + ")")
-                                        break
-                                    #else this moves on to next item on the list and checks again
+                            if "Subgroup" not in line[length-ii] and "uncultured" not in line[length-ii] and "uncultivated" not in line[length-ii]:
+                                Taxon_assignment.append(line[length-ii] + " (" + line[length] + ")")
                                 break
-                            # if none of those triggers, then "uncultured"/"uncultivated" is in there again
-                else: #this means "Subgroup" is in the cell
-                    for ii in range(length+1):
-                        if "Subgroup" not in line[length-ii] and "uncultured" not in line[length-ii] and "uncultivated" not in line[length-ii]:
-                            Taxon_assignment.append(line[length-ii] + " (" + line[length] + ")")
-                            break
     output = []
     for item in Taxon_assignment:
         item = item.replace("D_0__", "d ")
@@ -116,11 +119,11 @@ taxonomy_combiner combines rows with the same taxa values and arrange them from 
 '''
 def taxonomy_combiner(input_file, Taxon_assignment):
     #this part inserts the appropriate taxonomy assignment
-    new_f = []
+    import re
     with open(input_file,'r') as file:
             f = file.read().split('\n')
             for ii in range(1,len(f)):
-                f[ii] = f[ii].split(',')
+                f[ii] = re.split(',|\t',f[ii])
                 f[ii][0] = Taxon_assignment[ii-1]    
             replaced_output = f[1:len(f)]
             key = replaced_output[0][1:]
@@ -131,7 +134,8 @@ def taxonomy_combiner(input_file, Taxon_assignment):
     df = pd.DataFrame(replaced_output[1:])
     df_taxa = df[0]
     df = df.drop([0],axis=1) #get the columns with no taxa column
-    df = df.astype(int) #turn all the numbers to integers
+    df = df.astype(float).astype(int) #turn all the numbers to floats first
+    #df = df.astype(int) #turn all the numbers to integers
     #generate sum of counts for all samples as a list
     total = []
     for ii in range(1,len(key)+1):
@@ -152,7 +156,7 @@ def taxonomy_combiner(input_file, Taxon_assignment):
     #split_frames = [df.iloc[:,[0,0+1]], df.iloc[:,[2,2+1]]]
     split_frames = []
     new_header = df.columns
-    for ii in range(8):
+    for ii in range(len(key)):
         split_frames.append(df.iloc[:,[ii*2,(2*ii)+1]].sort_values(by=new_header[(ii*2)+1], ascending=False))
     concatenated = split_frames[0].to_numpy()
     #print(split_frames)
@@ -165,7 +169,6 @@ def taxonomy_combiner(input_file, Taxon_assignment):
     header = df.columns.to_numpy()
     concatenated = np.vstack((header,concatenated))
     #save as csv
-    #np.savetxt(file_path + "foo.csv", concatenated, fmt='%s', delimiter=",")
     return(concatenated, header_row, sample_names, total)
 '''
 topsearcher seach for the top n number of taxa and truncate the data to that, the rest of the sequence values is combined to an "Others" row
@@ -231,16 +234,14 @@ def topsearcher(input_array, output_file, header_row, top_taxa, total, sample_na
     others_array = others_array.astype(str)
     others_array = np.insert(others_array, 0, 'Others', axis=0)
     others_row = others_array.tolist()
-    with open(output_file, 'w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(header_row)
-        for i in range(taxa_num):
-            writer.writerow(final[i])
-        writer.writerow(others_row)
+    #append to final and output it
+    final.append(others_row)
+    return(final)
 
 '''
 This is where the GUI code starts
 '''
+from operator import index
 import tkinter as tk
 from tkinter import ttk
 #font types
@@ -288,21 +289,21 @@ class HomePage(tk.Frame):
         feature_path = tk.StringVar()
         self.featuretable_label = tk.Label(self,bg = 'white', width = 25, anchor = 'e', text="Feature table path: ")
         self.featuretable_entry = tk.Entry(self, width = 80, textvariable = feature_path)
-        self.featuretable_entry.insert(0, 'Ex. E:\Research/Taxonomic Analysis - feature-table (raw).csv')
+        self.featuretable_entry.insert(0, 'E:\Research/feature-table.tsv')
         self.featuretable_label.grid(row=4, column = 1, padx = (0,10), pady = (30,0))
         self.featuretable_entry.grid(row=4, column = 2, padx = (0,50), pady = (30,0))
         #taxonomy table entry
         taxa_path = tk.StringVar()
         self.taxatable_label = tk.Label(self,bg = 'white', width = 25, anchor = 'e', text="Taxonomy table path: ")
         self.taxatable_entry = tk.Entry(self, width = 80, textvariable = taxa_path)
-        self.taxatable_entry.insert(0, 'Ex. E:\Research/Taxonomic Analysis - taxonomy.csv')
+        self.taxatable_entry.insert(0, 'E:\Research/taxonomy.tsv')
         self.taxatable_label.grid(row=5, column = 1, padx = (0,10), pady = (10,0))
         self.taxatable_entry.grid(row=5, column = 2, padx = (0,50), pady = (10,0))
         #output csv path
         output_path = tk.StringVar()
         self.output_label = tk.Label(self,bg = 'white', width = 25, anchor = 'e', text="Output CSV path: ")
         self.output_entry = tk.Entry(self, width = 80, textvariable = output_path)
-        self.output_entry.insert(0, 'Ex. E:\Research/output.csv')
+        self.output_entry.insert(0, 'E:\Research/output.csv')
         self.output_label.grid(row=6, column = 1, padx = (0,10), pady = (10,0))
         self.output_entry.grid(row=6, column = 2, padx = (0,50), pady = (10,0))
         #selection number
@@ -339,7 +340,7 @@ class HomePage(tk.Frame):
         output_button.grid(row=11, columnspan=14, pady= (15,0))
         #explanation
         self.explain1 = tk.Label(self,bg = 'white', width = 100, anchor = 'e', justify = 'left', text="*Make sure to enter full path for all input tables\n*The inputs for taxonomic level, number of top taxa to select per sample, and graph legend font size must be integers\n*The example path given is in Windows format, Linux and macOS users will need to use a different path structure")
-        self.explain11 = tk.Label(self,bg = 'white', width = 120, anchor = 'e', justify = 'left', text="*Avoid editing the CSV input files using Excel prior to entering it into this program to avoid empty lines being added and disrupting the sorting process")
+        self.explain11 = tk.Label(self,bg = 'white', width = 120, anchor = 'e', justify = 'left', text="*Avoid editing the TSV input files using Excel prior to entering it into this program to avoid empty lines being added and disrupting the sorting process")
         self.explain2 = tk.Label(self,bg = 'white', width = 110, anchor = 'e', justify = 'left', text="*This tool is ONLY optimized for the taxonomic/feature table outputs from Qiime2-2020-2 using the Naive Bayes classifier trained on \n Silva 138 99% OTUs from the 515F/806R region of sequences, and using this with other classifier or bioinformatics package will not guarantee\n full functionality")
         self.explain3 = tk.Label(self,bg = 'white', width = 20, anchor = 'e', justify = 'left', text='Credit: Bill Yen')
         self.explain1.place(x=25,y=400)
@@ -350,11 +351,10 @@ class HomePage(tk.Frame):
         self.grid_columnconfigure(0, weight=2)
         self.grid_columnconfigure(5, weight=3)
     def gen_output(self):
-        #print(self.featuretable_entry.get())
         #genus is the 7th item on the list for taxonomy_selector
         concatenated, header_row, sample_names, total = taxonomy_combiner(self.featuretable_entry.get(), taxonomy_selector(self.taxatable_entry.get(), int(self.taxalevel_entry.get())))
         #the number in the input here represents where you truncate the data (10 means top 10 taxa in each samples, etc.)
-        topsearcher(concatenated, self.output_entry.get(), header_row, int(self.select_entry.get()), total, sample_names)
+        final = topsearcher(concatenated, self.output_entry.get(), header_row, int(self.select_entry.get()), total, sample_names)
         #Here are all the plotting stuff
         import matplotlib.pyplot as plt
         import matplotlib.colors as mcolors
@@ -362,7 +362,8 @@ class HomePage(tk.Frame):
         style.use("seaborn-muted")
         import numpy as np
         import pandas as pd
-        raw_data = pd.read_csv(self.output_entry.get())
+        pd.options.mode.chained_assignment = None  # default='warn'
+        raw_data = pd.DataFrame(data=final,columns=header_row,dtype=float)
         #convert to percentage
         raw_data_percent = pd.DataFrame()
         percentage1 = raw_data.groupby(['Taxon'])
@@ -378,7 +379,6 @@ class HomePage(tk.Frame):
         raw_data_percent = raw_data_percent.sort_values(by=sample_names[0], ascending = False)
         header_row = raw_data_percent['Taxon'].tolist()
         raw_data_percent = raw_data_percent.transpose().drop(['Taxon'])
-        data_array = raw_data_percent.to_numpy()
         raw_data_percent.columns = header_row
         #making a bigger colormap by combining smaller default ones
         colors1 = plt.cm.tab20b(np.linspace(0, 1, 20))
@@ -398,8 +398,15 @@ class HomePage(tk.Frame):
         plt.tight_layout()
         plt.subplots_adjust(right=0.8, top=0.9)
         #make legend and plot the graph
-        current_handles, current_labels = plt.gca().get_legend_handles_labels()
         plt.legend(loc='upper left', frameon = False, bbox_to_anchor=(1,1), handletextpad = 0.8, fontsize = int(self.legend_entry.get()), labelspacing = 0, ncol=1)
+        #fix output to export to csv
+        final_data = raw_data
+        for ii in range(len(final_data['Taxon'])):
+            final_data['Taxon'][ii] = final_data['Taxon'][ii].replace('$\it{','')
+            final_data['Taxon'][ii] = final_data['Taxon'][ii].replace('}$','')
+            final_data['Taxon'][ii] = final_data['Taxon'][ii].replace('\ ',' ')
+        #get rid of number index for the rows
+        final_data.to_csv(self.output_entry.get(), index = False)
         plt.show()
         
 app = AllWindow()
