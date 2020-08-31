@@ -134,8 +134,7 @@ def taxonomy_combiner(input_file, Taxon_assignment):
     df = pd.DataFrame(replaced_output[1:])
     df_taxa = df[0]
     df = df.drop([0],axis=1) #get the columns with no taxa column
-    df = df.astype(float).astype(int) #turn all the numbers to floats first
-    #df = df.astype(int) #turn all the numbers to integers
+    df = df.astype(float).astype(int) #turn all the numbers to floats first then integers
     #generate sum of counts for all samples as a list
     total = []
     for ii in range(1,len(key)+1):
@@ -152,20 +151,14 @@ def taxonomy_combiner(input_file, Taxon_assignment):
     #get rid of the index column
     df.set_index('Taxon',inplace=False)
     #now we sort by abundance
-    #print(df.iloc[:,[0,1]])
-    #split_frames = [df.iloc[:,[0,0+1]], df.iloc[:,[2,2+1]]]
     split_frames = []
     new_header = df.columns
     for ii in range(len(key)):
         split_frames.append(df.iloc[:,[ii*2,(2*ii)+1]].sort_values(by=new_header[(ii*2)+1], ascending=False))
     concatenated = split_frames[0].to_numpy()
-    #print(split_frames)
     for ii in range(1,len(split_frames)): #now we merge them back to df with numpy array
         split_frames[ii] = split_frames[ii].to_numpy()
         concatenated = np.concatenate((concatenated,split_frames[ii]), axis = 1)
-        #split_frames[0].merge(split_frames[ii], left_on=new_header[0], right_on=new_header[ii*2])
-        #new_df = split_frames[0]        
-        #concatenated = pd.concat([concatenated,split_frames[ii]], axis=1)
     header = df.columns.to_numpy()
     concatenated = np.vstack((header,concatenated))
     #save as csv
@@ -341,7 +334,7 @@ class HomePage(tk.Frame):
         #explanation
         self.explain1 = tk.Label(self,bg = 'white', width = 100, anchor = 'e', justify = 'left', text="*Input tables can be in either CSV or TSV format\n*Make sure to enter absolute file paths for all input tables\n*The inputs for taxonomic level, number of top taxa to select per sample, and graph legend font size must be integers\n*The example path given is in Windows format, Linux and macOS users will need to use a different path structure")
         self.explain11 = tk.Label(self,bg = 'white', width = 120, anchor = 'e', justify = 'left', text="*Avoid editing the CSV/TSV input files using Excel prior to entering it into this program to avoid empty lines being added and disrupting the sorting process")
-        self.explain2 = tk.Label(self,bg = 'white', width = 110, anchor = 'e', justify = 'left', text="*This tool is ONLY optimized for the taxonomic/feature table outputs from Qiime2-2020-2 using the Naive Bayes classifier trained on \n Silva 138 99% OTUs from the 515F/806R region of sequences, and using this with other classifiers or bioinformatics packages may require\n some adjustments")
+        self.explain2 = tk.Label(self,bg = 'white', width = 110, anchor = 'e', justify = 'left', text="*This tool is ONLY optimized for the taxonomic/feature table outputs from qiime2-2020-2 using the Naive Bayes classifier trained on \n Silva 138 99% OTUs from the 515F/806R region of sequences, and using this with other classifiers or bioinformatics packages may require\n some adjustments")
         self.explain3 = tk.Label(self,bg = 'white', width = 20, anchor = 'e', justify = 'left', text='Credit: Bill Yen')
         self.explain1.place(x=25,y=400)
         self.explain11.place(x=85,y=463)
