@@ -341,11 +341,11 @@ class HomePage(tk.Frame):
         #explanation
         self.explain1 = tk.Label(self,bg = 'white', width = 100, anchor = 'e', justify = 'left', text="*Input tables can be in either CSV or TSV format\n*Make sure to enter absolute file paths for all input tables\n*The inputs for taxonomic level, number of top taxa to select per sample, and graph legend font size must be integers\n*The example path given is in Windows format, Linux and macOS users will need to use a different path structure")
         self.explain11 = tk.Label(self,bg = 'white', width = 120, anchor = 'e', justify = 'left', text="*Avoid editing the CSV/TSV input files using Excel prior to entering it into this program to avoid empty lines being added and disrupting the sorting process")
-        self.explain2 = tk.Label(self,bg = 'white', width = 110, anchor = 'e', justify = 'left', text="*This tool is ONLY optimized for the taxonomic/feature table outputs from Qiime2-2020-2 using the Naive Bayes classifier trained on \n Silva 138 99% OTUs from the 515F/806R region of sequences, and using this with other classifier or bioinformatics package will not guarantee\n full functionality")
+        self.explain2 = tk.Label(self,bg = 'white', width = 110, anchor = 'e', justify = 'left', text="*This tool is ONLY optimized for the taxonomic/feature table outputs from Qiime2-2020-2 using the Naive Bayes classifier trained on \n Silva 138 99% OTUs from the 515F/806R region of sequences, and using this with other classifiers or bioinformatics packages may require\n some adjustments")
         self.explain3 = tk.Label(self,bg = 'white', width = 20, anchor = 'e', justify = 'left', text='Credit: Bill Yen')
         self.explain1.place(x=25,y=400)
         self.explain11.place(x=85,y=463)
-        self.explain2.place(x=81,y=490)
+        self.explain2.place(x=60,y=490)
         self.explain3.place(x=46,y=620)
         #configure grid
         self.grid_columnconfigure(0, weight=2)
