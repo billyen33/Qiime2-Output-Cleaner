@@ -246,7 +246,7 @@ class AllWindow(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
         #add title
-        tk.Tk.wm_title(self, "Qiime2 Cleaner")
+        tk.Tk.wm_title(self, "QIIME 2 Cleaner")
         container = tk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
         container.grid_rowconfigure(0, weight=1)
@@ -277,7 +277,7 @@ class AllWindow(tk.Tk):
 class HomePage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Qiime2 Output Selector & Community Composition Plotter", bg='white', font = TITLE_FONT).grid(row=0, columnspan=14, pady = (15,0))
+        label = tk.Label(self, text="QIIME 2 Output Selector & Community Composition Plotter", bg='white', font = TITLE_FONT).grid(row=0, columnspan=14, pady = (15,0))
         #feature table entry
         feature_path = tk.StringVar()
         self.featuretable_label = tk.Label(self,bg = 'white', width = 25, anchor = 'e', text="Feature table path: ")
