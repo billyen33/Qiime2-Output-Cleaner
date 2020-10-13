@@ -218,14 +218,14 @@ class HomePage(tk.Frame):
         label = tk.Label(self, text="QIIME 2 Output Selector & Community Composition Plotter", bg='white', font = TITLE_FONT).grid(row=0, columnspan=14, pady = (15,0))
         #feature table entry
         feature_path = tk.StringVar()
-        self.featuretable_label = tk.Label(self,bg = 'white', width = 25, anchor = 'e', text="Collapsed feature table path: ")
+        self.featuretable_label = tk.Label(self,bg = 'white', width = 35, anchor = 'e', text="Collapsed feature table path: ")
         self.featuretable_entry = tk.Entry(self, width = 80, textvariable = feature_path)
         self.featuretable_entry.insert(0, 'Ex. C:\Research/collapsed-feature-table.tsv')
         self.featuretable_label.grid(row=4, column = 1, padx = (0,10), pady = (30,0))
         self.featuretable_entry.grid(row=4, column = 2, padx = (0,50), pady = (30,0))
         #output csv path
         output_path = tk.StringVar()
-        self.output_label = tk.Label(self,bg = 'white', width = 25, anchor = 'e', text="Output CSV path: ")
+        self.output_label = tk.Label(self,bg = 'white', width = 35, anchor = 'e', text="Output CSV path: ")
         self.output_entry = tk.Entry(self, width = 80, textvariable = output_path)
         self.output_entry.insert(0, 'Ex. C:\Research/output.csv')
         self.output_label.grid(row=5, column = 1, padx = (0,10), pady = (10,0))
